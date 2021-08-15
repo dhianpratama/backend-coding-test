@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "tslint:latest"
+  ],
+  "rules": {
+    "quotemark": [
+      true,
+      "double",
+      "avoid-escape"
+    ],
+    "no-console": false,
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
+  }
+}
