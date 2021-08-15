@@ -1,15 +1,15 @@
-'use strict';
+"use strict";
 
-import * as sqlite3 from 'sqlite3';
-import App from './src/app';
-import buildSchemas from './src/schemas';
-import logger from './src/logger';
+import * as sqlite3 from "sqlite3";
+import App from "./src/app";
+import buildSchemas from "./src/schemas";
+import logger from "./src/logger";
 
 
 const port = 8010;
 
 const Sqlite3 = sqlite3.verbose();
-const db = new Sqlite3.Database(':memory:');
+const db = new Sqlite3.Database(":memory:");
 
 db.serialize(() => {
     buildSchemas(db);
