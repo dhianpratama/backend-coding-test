@@ -1,15 +1,16 @@
 "use strict";
 
-import * as bodyParser from "body-parser";
-import * as express from "express";
+import bodyParser from "body-parser";
+import express from "express";
+import asyncHandler from "express-async-handler"
 
 const app = express();
 const jsonParser = bodyParser.json();
 
 export default (db) => {
-    app.get("/health", (req, res) => res.send("Healthy"));
+    app.get("/health", asyncHandler(async (req, res) => res.send("Healthy")));
 
-    app.post(`/rides`, jsonParser, (req, res) => {
+    app.post(`/rides`, jsonParser, asyncHandler(async (req, res) => {
         const startLatitude = Number(req.body.start_lat);
         const startLongitude = Number(req.body.start_long);
         const endLatitude = Number(req.body.end_lat);
@@ -63,70 +64,43 @@ export default (db) => {
           req.body.driver_vehicle,
         ];
 
-        const result = db.run(`INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)`
-          , values, function(err) {
-            if (err) {
-                return res.send({
-                    error_code: "SERVER_ERROR",
-                    message: "Unknown error",
-                });
-            }
+        const result = await db.run(
+          `INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+          values
+        );
 
-            db.all("SELECT * FROM Rides WHERE rideID = ?", this.lastID, (err1, rows) => {
-                if (err1) {
-                    return res.send({
-                        error_code: "SERVER_ERROR",
-                        message: "Unknown error",
-                    });
-                }
+        const rides = await db.all("SELECT * FROM Rides WHERE rideID = ?", result.lastID);
 
-                res.send(rows);
-            });
-        });
-    });
+        res.send(rides);
+    }));
 
-    app.get("/rides", (req, res) => {
+    app.get("/rides", asyncHandler(async (req, res) => {
         const page = req.query.page || 1;
         const limit = req.query.limit || 10;
         const skip = (page - 1) * limit;
-        db.all(`SELECT * FROM Rides  ORDER BY riderName LIMIT ${limit} OFFSET ${skip}`, (err, rows) => {
-            if (err) {
-                return res.send({
-                    error_code: "SERVER_ERROR",
-                    message: "Unknown error",
-                });
-            }
 
-            if (rows.length === 0) {
-                return res.send({
-                    error_code: "RIDES_NOT_FOUND_ERROR",
-                    message: "Could not find any rides",
-                });
-            }
+        const rows = await db.all(`SELECT * FROM Rides  ORDER BY riderName LIMIT ${limit} OFFSET ${skip}`, []);
+        if (rows.length === 0) {
+            return res.send({
+                error_code: "RIDES_NOT_FOUND_ERROR",
+                message: "Could not find any rides",
+            });
+        }
 
-            res.send(rows);
-        });
-    });
+        res.send(rows);
+    }));
 
-    app.get("/rides/:id", (req, res) => {
-        db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, (err, rows) => {
-            if (err) {
-                return res.send({
-                    error_code: "SERVER_ERROR",
-                    message: "Unknown error",
-                });
-            }
+    app.get("/rides/:id", asyncHandler(async (req, res) => {
+        const rows = await db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, []);
+        if (rows.length === 0) {
+            return res.send({
+                error_code: "RIDES_NOT_FOUND_ERROR",
+                message: "Could not find any rides",
+            });
+        }
 
-            if (rows.length === 0) {
-                return res.send({
-                    error_code: "RIDES_NOT_FOUND_ERROR",
-                    message: "Could not find any rides",
-                });
-            }
-
-            res.send(rows);
-        });
-    });
+        res.send(rows);
+    }));
 
     return app;
 };
