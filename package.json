@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "dev": "nodemon --watch 'src/**/*' --watch 'index.ts' -e ts,tsx --exec ts-node index.ts",
+    "dev": "nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node src/server.ts",
     "build-ts": "tsc",
     "tslint": "tslint -c tslint.json -p tsconfig.json -t verbose",
     "tslint:fix": "tslint --fix -c tslint.json -p tsconfig.json -t verbose",

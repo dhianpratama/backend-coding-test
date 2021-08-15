@@ -4,8 +4,7 @@ import request from "supertest";
 import assert from "assert";
 
 import App from "../src/app";
-import { openConnection } from "../src/utils/sqliteAsync";
-import buildSchemas from "../src/schemas";
+import { init } from "../src/models";
 
 
 let db;
@@ -25,9 +24,8 @@ let rideID;
 
 describe("API tests", () => {
     before(async () => {
-        db = await openConnection();
-        buildSchemas(db);
-        app = App(db);
+        db = await init();
+        app = App();
     });
 
     describe("COMMON TEST", () => {
