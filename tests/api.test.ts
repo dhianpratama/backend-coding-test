@@ -1,16 +1,14 @@
 "use strict";
 
-import * as request from "supertest";
-import * as sqlite3 from "sqlite3";
+import request from "supertest";
+import assert from "assert";
 
 import App from "../src/app";
-import buildSchemas from "../src/schemas";
-import * as assert from "assert";
+import { init } from "../src/models";
 
-const Sqlite3 = sqlite3.verbose();
-const db = new Sqlite3.Database(":memory:");
 
-const app = App(db);
+let db;
+let app;
 
 const DUMMY_RIDE = {
   start_lat: 10,
@@ -25,16 +23,9 @@ const DUMMY_RIDE = {
 let rideID;
 
 describe("API tests", () => {
-    before((done) => {
-        db.serialize((err) => {
-            if (err) {
-                return done(err);
-            }
-
-            buildSchemas(db);
-
-            done();
-        });
+    before(async () => {
+        db = await init();
+        app = App();
     });
 
     describe("COMMON TEST", () => {
