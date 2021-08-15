@@ -14,7 +14,9 @@
     "build": "npm run tslint && npm run build-ts",
     "test": "nyc mocha -r ts-node/register -require source-map-support/register --recursive tests/**/*.test.ts --exit --timeout 120000",
     "test:report:lcov": "nyc --reporter=lcov mocha -r ts-node/register -require source-map-support/register --recursive tests/**/*.test.ts --exit --timeout 120000",
-    "start": "npm run build && node dist/index.js"
+    "start": "npm run build && node dist/index.js",
+    "lalala": "echo lalalalala",
+    "prepare": "husky install"
   },
   "keywords": [
     "Xendit"
@@ -33,6 +35,7 @@
     "@types/chai": "^4.2.21",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.6.1",
+    "husky": "^7.0.0",
     "mocha": "^6.1.4",
     "nodemon": "^2.0.12",
     "nyc": "^15.1.0",
