@@ -3,6 +3,8 @@
 import * as sqlite3 from 'sqlite3';
 import App from './src/app';
 import buildSchemas from './src/schemas';
+import logger from './src/logger';
+
 
 const port = 8010;
 
@@ -14,5 +16,5 @@ db.serialize(() => {
 
     const app = App(db);
 
-    app.listen(port, () => console.log(`App started and listening on port ${port}`));
+    app.listen(port, () => logger.info(`App started and listening on port ${port}`));
 });

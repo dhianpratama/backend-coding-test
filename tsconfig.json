@@ -3,9 +3,11 @@
     "outDir": "./dist",
     "allowJs": true,
     "target": "es5",
+    "types": ["mocha", "node"]
   },
   "include": [
     "./src/**/*",
-    "./index.ts"
+    "./index.ts",
+    "./tests/**/*"
   ]
 }

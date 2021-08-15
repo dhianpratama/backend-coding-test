@@ -8,6 +8,7 @@
       "double",
       "avoid-escape"
     ],
-    "no-console": false
+    "no-console": false,
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
   }
 }
