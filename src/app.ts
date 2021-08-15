@@ -1,15 +1,15 @@
-'use strict';
+"use strict";
 
-import * as bodyParser from 'body-parser';
-import * as express from 'express';
+import * as bodyParser from "body-parser";
+import * as express from "express";
 
 const app = express();
 const jsonParser = bodyParser.json();
 
 export default (db) => {
-    app.get('/health', (req, res) => res.send('Healthy'));
+    app.get("/health", (req, res) => res.send("Healthy"));
 
-    app.post('/rides', jsonParser, (req, res) => {
+    app.post(`/rides`, jsonParser, (req, res) => {
         const startLatitude = Number(req.body.start_lat);
         const startLongitude = Number(req.body.start_long);
         const endLatitude = Number(req.body.end_lat);
@@ -20,36 +20,36 @@ export default (db) => {
 
         if (startLatitude < -90 || startLatitude > 90 || startLongitude < -180 || startLongitude > 180) {
             return res.send({
-                error_code: 'VALIDATION_ERROR',
-                message: 'Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively',
+                error_code: "VALIDATION_ERROR",
+                message: "Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively",
             });
         }
 
         if (endLatitude < -90 || endLatitude > 90 || endLongitude < -180 || endLongitude > 180) {
             return res.send({
-                error_code: 'VALIDATION_ERROR',
-                message: 'End latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively',
+                error_code: "VALIDATION_ERROR",
+                message: "End latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively",
             });
         }
 
-        if (typeof riderName !== 'string' || riderName.length < 1) {
+        if (typeof riderName !== "string" || riderName.length < 1) {
             return res.send({
-                error_code: 'VALIDATION_ERROR',
-                message: 'Rider name must be a non empty string',
+                error_code: "VALIDATION_ERROR",
+                message: "Rider name must be a non empty string",
             });
         }
 
-        if (typeof driverName !== 'string' || driverName.length < 1) {
+        if (typeof driverName !== "string" || driverName.length < 1) {
             return res.send({
-                error_code: 'VALIDATION_ERROR',
-                message: 'Rider name must be a non empty string',
+                error_code: "VALIDATION_ERROR",
+                message: "Rider name must be a non empty string",
             });
         }
 
-        if (typeof driverVehicle !== 'string' || driverVehicle.length < 1) {
+        if (typeof driverVehicle !== "string" || driverVehicle.length < 1) {
             return res.send({
-                error_code: 'VALIDATION_ERROR',
-                message: 'Rider name must be a non empty string',
+                error_code: "VALIDATION_ERROR",
+                message: "Rider name must be a non empty string",
             });
         }
 
@@ -67,16 +67,16 @@ export default (db) => {
           , values, function(err) {
             if (err) {
                 return res.send({
-                    error_code: 'SERVER_ERROR',
-                    message: 'Unknown error',
+                    error_code: "SERVER_ERROR",
+                    message: "Unknown error",
                 });
             }
 
-            db.all('SELECT * FROM Rides WHERE rideID = ?', this.lastID, function (err1, rows) {
+            db.all("SELECT * FROM Rides WHERE rideID = ?", this.lastID, (err1, rows) => {
                 if (err1) {
                     return res.send({
-                        error_code: 'SERVER_ERROR',
-                        message: 'Unknown error',
+                        error_code: "SERVER_ERROR",
+                        message: "Unknown error",
                     });
                 }
 
@@ -85,19 +85,19 @@ export default (db) => {
         });
     });
 
-    app.get('/rides', (req, res) => {
-        db.all('SELECT * FROM Rides', function (err, rows) {
+    app.get("/rides", (req, res) => {
+        db.all("SELECT * FROM Rides", (err, rows) => {
             if (err) {
                 return res.send({
-                    error_code: 'SERVER_ERROR',
-                    message: 'Unknown error',
+                    error_code: "SERVER_ERROR",
+                    message: "Unknown error",
                 });
             }
 
             if (rows.length === 0) {
                 return res.send({
-                    error_code: 'RIDES_NOT_FOUND_ERROR',
-                    message: 'Could not find any rides',
+                    error_code: "RIDES_NOT_FOUND_ERROR",
+                    message: "Could not find any rides",
                 });
             }
 
@@ -105,19 +105,19 @@ export default (db) => {
         });
     });
 
-    app.get('/rides/:id', (req, res) => {
-        db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, function (err, rows) {
+    app.get("/rides/:id", (req, res) => {
+        db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, (err, rows) => {
             if (err) {
                 return res.send({
-                    error_code: 'SERVER_ERROR',
-                    message: 'Unknown error',
+                    error_code: "SERVER_ERROR",
+                    message: "Unknown error",
                 });
             }
 
             if (rows.length === 0) {
                 return res.send({
-                    error_code: 'RIDES_NOT_FOUND_ERROR',
-                    message: 'Could not find any rides',
+                    error_code: "RIDES_NOT_FOUND_ERROR",
+                    message: "Could not find any rides",
                 });
             }
 
