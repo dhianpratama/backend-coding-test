@@ -14,7 +14,7 @@ const app = App(db);
 
 const DUMMY_RIDE = {
   start_lat: 10,
-  start_lon: 20,
+  start_long: 20,
   end_lat: 30,
   end_long: 60,
   rider_name: "dhian",
@@ -22,7 +22,7 @@ const DUMMY_RIDE = {
   driver_vehicle: "Civic"
 };
 
-let rideId;
+let rideID;
 
 describe("API tests", () => {
     before((done) => {
@@ -122,7 +122,13 @@ describe("API tests", () => {
               .post("/rides")
               .send(DUMMY_RIDE)
               .expect("Content-Type", /json/)
-              .expect(200, done);
+              .then((response) => {
+                const ride = response.body[0];
+                rideID = ride.rideID;
+                assert.equal(ride.riderName, DUMMY_RIDE.rider_name);
+                done();
+              })
+              .catch((err) => done(err));
       });
     });
 
@@ -131,16 +137,26 @@ describe("API tests", () => {
           request(app)
               .get("/rides")
               .expect("Content-Type", /json/)
-              .expect(200, done);
+              .then((response) => {
+                const ride = response.body[0];
+                assert.equal(ride.riderName, DUMMY_RIDE.rider_name);
+                done();
+              })
+              .catch((err) => done(err));
       });
     });
 
     describe("GET /rides/:id", () => {
       it("should return ride object", (done) => {
           request(app)
-              .get(`/rides/1`)
+              .get(`/rides/${rideID}`)
               .expect("Content-Type", /json/)
-              .expect(200, done);
+              .then((response) => {
+                const ride = response.body[0];
+                assert.equal(ride.riderName, DUMMY_RIDE.rider_name);
+                done();
+              })
+              .catch((err) => done(err));
       });
     });
 
