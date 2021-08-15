@@ -3,7 +3,7 @@ import { getDb } from "../models";
 export const listRidesWithPagination = async (page: number, limit: number) => {
   const db = await getDb();
   const skip = (page - 1) * limit;
-  const rides = await db.all(`SELECT * FROM Rides  ORDER BY riderName LIMIT ${limit} OFFSET ${skip}`, []);
+  const rides = await db.all(`SELECT * FROM Rides  ORDER BY riderName LIMIT ? OFFSET ?`, [limit, skip]);
   return rides;
 };
 
@@ -28,6 +28,6 @@ export const createNewRide = async (startLat, startLong, endLat, endLong, riderN
 
 export const getRideById = async (id: number) => {
   const db = await getDb();
-  const rides = await db.all(`SELECT * FROM Rides WHERE rideID='${id}'`, []);
+  const rides = await db.all(`SELECT * FROM Rides WHERE rideID=?`, [id]);
   return rides;
 };
