@@ -12,7 +12,8 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json -t verbose",
     "tslint:fix": "tslint --fix -c tslint.json -p tsconfig.json -t verbose",
     "build": "npm run tslint && npm run build-ts",
-    "test": "nyc --reporter=lcov mocha -r ts-node/register -require source-map-support/register --recursive tests/**/*.test.ts --exit --timeout 120000",
+    "test": "nyc mocha -r ts-node/register -require source-map-support/register --recursive tests/**/*.test.ts --exit --timeout 120000",
+    "test:report:lcov": "nyc --reporter=lcov mocha -r ts-node/register -require source-map-support/register --recursive tests/**/*.test.ts --exit --timeout 120000",
     "start": "npm run build && node dist/index.js"
   },
   "keywords": [
