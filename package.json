@@ -12,7 +12,7 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json -t verbose",
     "tslint:fix": "tslint --fix -c tslint.json -p tsconfig.json -t verbose",
     "build": "npm run tslint && npm run build-ts",
-    "test": "mocha -r ts-node/register tests/**/*.test.ts",
+    "test": "nyc --reporter=lcov mocha -r ts-node/register -require source-map-support/register --recursive tests/**/*.test.ts --exit --timeout 120000",
     "start": "npm run build && node dist/index.js"
   },
   "keywords": [
@@ -28,11 +28,14 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/chai": "^4.2.21",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.6.1",
     "mocha": "^6.1.4",
     "nodemon": "^2.0.12",
+    "nyc": "^15.1.0",
+    "source-map-support": "^0.5.19",
     "ts-node": "^10.2.0",
     "tslint": "^6.1.3",
     "typescript": "^4.3.5"
