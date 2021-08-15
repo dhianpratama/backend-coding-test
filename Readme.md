@@ -45,6 +45,9 @@ To list all rides data.
 **Request:**
 ```json
 GET /rides
+Query String:
+  - page (default 1)
+  - limit (default 10)
 Content-Type: application/json
 ```
 **Successful Response:**

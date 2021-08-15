@@ -86,7 +86,10 @@ export default (db) => {
     });
 
     app.get("/rides", (req, res) => {
-        db.all("SELECT * FROM Rides", (err, rows) => {
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 10;
+        const skip = (page - 1) * limit;
+        db.all(`SELECT * FROM Rides  ORDER BY riderName LIMIT ${limit} OFFSET ${skip}`, (err, rows) => {
             if (err) {
                 return res.send({
                     error_code: "SERVER_ERROR",
