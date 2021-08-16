@@ -2,9 +2,9 @@
 
 import bodyParser from "body-parser";
 import express from "express";
-import asyncHandler from "express-async-handler"
+import asyncHandler from "express-async-handler";
 
-import { getRides, postRide, getSingleRide } from "./controllers/rideController";
+import { getRides, getSingleRide, postRide } from "./controllers/rideController";
 
 const app = express();
 const jsonParser = bodyParser.json();
