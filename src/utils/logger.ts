@@ -8,18 +8,18 @@ const defaultFormat = winston.format.printf((info) => {
 
 const consoleTransport = () => {
   return new winston.transports.Console({
-    level: process.env.NODE_ENV === "production" ? "info" : "silly",
     format: winston.format.combine(
       winston.format.timestamp(),
       winston.format.colorize(),
       defaultFormat,
     ),
-  })
-}
+    level: process.env.NODE_ENV === "production" ? "info" : "silly",
+  });
+};
 
 const Logger = winston.createLogger({
-  level: "info",
   format: defaultFormat,
+  level: "info",
   transports: [
     consoleTransport(),
     new winston.transports.File({ filename: "error.log", level: "error" }),

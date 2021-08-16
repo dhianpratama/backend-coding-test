@@ -1,13 +1,13 @@
 export interface IConfig {
-  port: number;
-  isProduction: boolean;
   dbFileName: string;
+  isProduction: boolean;
+  port: number;
 }
 
 const config: IConfig = {
-  port: +process.env.PORT || 8010,
+  dbFileName: process.env.DB_FILENAME || ":memory:",
   isProduction: process.env.NODE_ENV === "production",
-  dbFileName: process.env.DB_FILENAME || ":memory:"
+  port: +process.env.PORT || 8010,
 };
 
 export default config;

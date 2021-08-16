@@ -1,11 +1,10 @@
 "use strict";
 
-import request from "supertest";
 import assert from "assert";
+import request from "supertest";
 
 import App from "../src/app";
 import { init } from "../src/models";
-
 
 let db;
 let app;
@@ -13,11 +12,12 @@ let app;
 const DUMMY_RIDE = {
   start_lat: 10,
   start_long: 20,
+  // tslint:disable-next-line:object-literal-sort-keys
   end_lat: 30,
   end_long: 60,
   rider_name: "dhian",
   driver_name: "rony",
-  driver_vehicle: "Civic"
+  driver_vehicle: "Civic",
 };
 
 let rideID;
@@ -44,12 +44,12 @@ describe("API tests", () => {
               .post("/rides")
               .send({
                 ...DUMMY_RIDE,
-                start_lat: -100
+                start_lat: -100,
               })
               .expect("Content-Type", /json/)
               .expect(200, {
-                "error_code": "VALIDATION_ERROR",
-                "message": "Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively"
+                error_code: "VALIDATION_ERROR",
+                message: "Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively",
               }, done);
         });
 
@@ -58,12 +58,12 @@ describe("API tests", () => {
               .post("/rides")
               .send({
                 ...DUMMY_RIDE,
-                end_lat: 110
+                end_lat: 110,
               })
               .expect("Content-Type", /json/)
               .expect(200, {
-                "error_code": "VALIDATION_ERROR",
-                "message": "End latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively"
+                error_code: "VALIDATION_ERROR",
+                message: "End latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively",
               }, done);
         });
 
@@ -72,12 +72,12 @@ describe("API tests", () => {
               .post("/rides")
               .send({
                 ...DUMMY_RIDE,
-                rider_name: null
+                rider_name: null,
               })
               .expect("Content-Type", /json/)
               .expect(200, {
-                "error_code": "VALIDATION_ERROR",
-                "message": "Rider name must be a non empty string"
+                error_code: "VALIDATION_ERROR",
+                message: "Rider name must be a non empty string",
               }, done);
         });
 
@@ -86,12 +86,12 @@ describe("API tests", () => {
               .post("/rides")
               .send({
                 ...DUMMY_RIDE,
-                driver_name: null
+                driver_name: null,
               })
               .expect("Content-Type", /json/)
               .expect(200, {
-                "error_code": "VALIDATION_ERROR",
-                "message": "Rider name must be a non empty string"
+                error_code: "VALIDATION_ERROR",
+                message: "Rider name must be a non empty string",
               }, done);
         });
 
@@ -100,12 +100,12 @@ describe("API tests", () => {
               .post("/rides")
               .send({
                 ...DUMMY_RIDE,
-                driver_vehicle: null
+                driver_vehicle: null,
               })
               .expect("Content-Type", /json/)
               .expect(200, {
-                "error_code": "VALIDATION_ERROR",
-                "message": "Rider name must be a non empty string"
+                error_code: "VALIDATION_ERROR",
+                message: "Rider name must be a non empty string",
               }, done);
         });
 
@@ -153,7 +153,6 @@ describe("API tests", () => {
       });
     });
 
-
     describe("PAGINATION TEST", () => {
       before((done) => {
         const promises = Array.from(Array(15).keys()).map((val, i) => {
@@ -196,7 +195,6 @@ describe("API tests", () => {
               .catch((err) => done(err));
         });
       });
-
 
     });
 

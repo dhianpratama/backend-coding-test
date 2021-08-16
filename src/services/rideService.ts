@@ -20,7 +20,7 @@ export const createNewRide = async (startLat, startLong, endLat, endLong, riderN
   ];
   const result = await db.run(
     `INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    values
+    values,
   );
   const rides = await db.all("SELECT * FROM Rides WHERE rideID = ?", result.lastID);
   return rides;

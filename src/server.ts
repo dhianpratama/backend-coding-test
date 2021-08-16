@@ -1,9 +1,9 @@
 "use strict";
 
 import App from "./app";
+import config from "./config";
 import { init } from "./models";
 import logger from "./utils/logger";
-import config from "./config";
 
 (async () => {
   const db = await init();

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { listRidesWithPagination, createNewRide, getRideById } from "../services/rideService";
+import { createNewRide, getRideById, listRidesWithPagination } from "../services/rideService";
 
 export const getRides = async (req: Request, res: Response) => {
   const page = req.query.page || 1;
@@ -61,7 +61,9 @@ export const postRide = async (req: Request, res: Response) => {
       });
   }
 
-  const rides = await createNewRide(startLatitude, startLongitude, endLatitude, endLatitude, riderName, driverName, driverVehicle);
+  const rides = await createNewRide(
+    startLatitude, startLongitude, endLatitude, endLatitude, riderName, driverName, driverVehicle,
+  );
 
   return res.send(rides);
 };
@@ -76,4 +78,4 @@ export const getSingleRide = async (req: Request, res: Response) => {
     });
   }
   res.send(rides);
-}
+};

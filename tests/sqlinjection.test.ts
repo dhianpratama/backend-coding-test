@@ -1,15 +1,13 @@
 "use strict";
 
-import request from "supertest";
 import assert from "assert";
+import request from "supertest";
 
 import App from "../src/app";
 import { init } from "../src/models";
 
-
 let db;
 let app;
-
 
 describe("SQL Injection tests", () => {
     before(async () => {
@@ -21,7 +19,7 @@ describe("SQL Injection tests", () => {
       request(app)
         .get(`/rides/1 || DROP TABLE Rides;`)
         .expect("Content-Type", /json/)
-        .expect(200, done)
+        .expect(200, done);
   });
 
 });
