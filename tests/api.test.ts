@@ -1,10 +1,14 @@
 "use strict";
 
-import assert from "assert";
+// tslint:disable: no-implicit-dependencies
 import request from "supertest";
+import chai from "chai";
 
 import App from "../src/app";
 import { init } from "../src/models";
+import httpStatus from "http-status";
+
+const expect = chai.expect;
 
 let db;
 let app;
@@ -47,10 +51,13 @@ describe("API tests", () => {
                 start_lat: -100,
               })
               .expect("Content-Type", /json/)
-              .expect(200, {
-                error_code: "VALIDATION_ERROR",
-                message: "Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively",
-              }, done);
+              .then((response) => {
+                const responseData = response.body;
+                expect(responseData.code).equal(httpStatus.BAD_REQUEST);
+                expect(responseData.data.start).equal("Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively");
+                done();
+              })
+              .catch((err) => done(err));
         });
 
         it("should throw error if endLatitude > 90", (done) => {
@@ -61,10 +68,13 @@ describe("API tests", () => {
                 end_lat: 110,
               })
               .expect("Content-Type", /json/)
-              .expect(200, {
-                error_code: "VALIDATION_ERROR",
-                message: "End latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively",
-              }, done);
+              .then((response) => {
+                const responseData = response.body;
+                expect(responseData.code).equal(httpStatus.BAD_REQUEST);
+                expect(responseData.data.end).equal("End latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively");
+                done();
+              })
+              .catch((err) => done(err));
         });
 
         it("should throw error if rider_name is null", (done) => {
@@ -75,10 +85,13 @@ describe("API tests", () => {
                 rider_name: null,
               })
               .expect("Content-Type", /json/)
-              .expect(200, {
-                error_code: "VALIDATION_ERROR",
-                message: "Rider name must be a non empty string",
-              }, done);
+              .then((response) => {
+                const responseData = response.body;
+                expect(responseData.code).equal(httpStatus.BAD_REQUEST);
+                expect(responseData.data.rider_name).equal("Rider name must be a non empty string");
+                done();
+              })
+              .catch((err) => done(err));
         });
 
         it("should throw error if driver_name is null", (done) => {
@@ -89,10 +102,13 @@ describe("API tests", () => {
                 driver_name: null,
               })
               .expect("Content-Type", /json/)
-              .expect(200, {
-                error_code: "VALIDATION_ERROR",
-                message: "Rider name must be a non empty string",
-              }, done);
+              .then((response) => {
+                const responseData = response.body;
+                expect(responseData.code).equal(httpStatus.BAD_REQUEST);
+                expect(responseData.data.driver_name).equal("Driver name must be a non empty string");
+                done();
+              })
+              .catch((err) => done(err));
         });
 
         it("should throw error if driver_vehicle is null", (done) => {
@@ -103,10 +119,13 @@ describe("API tests", () => {
                 driver_vehicle: null,
               })
               .expect("Content-Type", /json/)
-              .expect(200, {
-                error_code: "VALIDATION_ERROR",
-                message: "Rider name must be a non empty string",
-              }, done);
+              .then((response) => {
+                const responseData = response.body;
+                expect(responseData.code).equal(httpStatus.BAD_REQUEST);
+                expect(responseData.data.driver_vehicle).equal("Driver vehicle must be a non empty string");
+                done();
+              })
+              .catch((err) => done(err));
         });
 
         it("should return success if all data is correct", (done) => {
@@ -115,9 +134,10 @@ describe("API tests", () => {
                 .send(DUMMY_RIDE)
                 .expect("Content-Type", /json/)
                 .then((response) => {
-                  const ride = response.body[0];
-                  rideID = ride.rideID;
-                  assert.equal(ride.riderName, DUMMY_RIDE.rider_name);
+                  const responseData = response.body;
+                  expect(responseData.code).equal(httpStatus.OK);
+                  expect(responseData.data.ride.riderName).equal(DUMMY_RIDE.rider_name);
+                  rideID = responseData.data.ride.rideID;
                   done();
                 })
                 .catch((err) => done(err));
@@ -130,8 +150,12 @@ describe("API tests", () => {
                 .get("/rides")
                 .expect("Content-Type", /json/)
                 .then((response) => {
-                  const ride = response.body[0];
-                  assert.equal(ride.riderName, DUMMY_RIDE.rider_name);
+                  const responseData = response.body;
+                  expect(responseData.code).equal(httpStatus.OK);
+                  expect(responseData.data.rides).length(1);
+
+                  const ride = responseData.data.rides[0];
+                  expect(ride.riderName).equal(DUMMY_RIDE.rider_name);
                   done();
                 })
                 .catch((err) => done(err));
@@ -144,8 +168,9 @@ describe("API tests", () => {
                 .get(`/rides/${rideID}`)
                 .expect("Content-Type", /json/)
                 .then((response) => {
-                  const ride = response.body[0];
-                  assert.equal(ride.riderName, DUMMY_RIDE.rider_name);
+                  const responseData = response.body;
+                  expect(responseData.code).equal(httpStatus.OK);
+                  expect(responseData.data.ride.riderName).equal(DUMMY_RIDE.rider_name)
                   done();
                 })
                 .catch((err) => done(err));
@@ -173,23 +198,29 @@ describe("API tests", () => {
       });
 
       describe("GET /rides", () => {
-        it("should return max 10 items if limit and page are not given", (done) => {
+        it("should return max 10 items, and totalPage 2, if limit and page are not given", (done) => {
             request(app)
                 .get("/rides")
                 .expect("Content-Type", /json/)
                 .then((response) => {
-                  assert.equal(response.body.length, 10);
+                  const responseData = response.body;
+                  expect(responseData.code).equal(httpStatus.OK);
+                  expect(responseData.data.rides).length(10)
+                  expect(responseData.data.totalPage).equal(2)
                   done();
                 })
                 .catch((err) => done(err));
         });
 
-        it("should return 6 items if page 2 is given", (done) => {
+        it("should return 6 items, and totalPage 2, if page 2 is given", (done) => {
           request(app)
               .get("/rides?page=2")
               .expect("Content-Type", /json/)
               .then((response) => {
-                assert.equal(response.body.length, 6);
+                const responseData = response.body;
+                expect(responseData.code).equal(httpStatus.OK);
+                expect(responseData.data.rides).length(6)
+                expect(responseData.data.totalPage).equal(2)
                 done();
               })
               .catch((err) => done(err));
