@@ -15,7 +15,8 @@
     "test": "nyc mocha -r ts-node/register -require source-map-support/register --recursive tests/**/*.test.ts --exit --timeout 120000",
     "test:report:lcov": "nyc --reporter=lcov mocha -r ts-node/register -require source-map-support/register --recursive tests/**/*.test.ts --exit --timeout 120000",
     "test:artillery": "artillery run load-test.yml",
-    "test:load": "npm-run-all build --parallel start:forever test:artillery",
+    "test:load": "npm-run-all build --parallel serve test:artillery",
+    "serve": "node dist/src/server.js",
     "start": "npm run build && node dist/src/server.js",
     "start:forever": "forever --minUptime 10000 -c node dist/src/server.js --optimize_for_size --max_old_space_size=920 --gc_interval=100"
   },
