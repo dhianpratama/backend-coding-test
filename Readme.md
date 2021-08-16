@@ -11,7 +11,7 @@
 
 > A coding assessment for Xendit backend interviews
 
-### ✨ [Demo](https://sample.com)
+### ✨ [Demo](https://xendit-backend-test.herokuapp.com/)
 
 ## Overview
 This is a Node Express project with REST API to store the customer's and driver's trip. It will store the start and end location point.
