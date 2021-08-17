@@ -29,7 +29,7 @@ let rideID;
 describe("API tests", () => {
     before(async () => {
         db = await init();
-        app = App();
+        app = App({ disabledRateLimiter: true });
     });
 
     describe("COMMON TEST", () => {
