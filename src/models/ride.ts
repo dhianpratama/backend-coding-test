@@ -1,6 +1,6 @@
 "use strict";
 
-const createRideTableSchema = `
+export const createRideTableSchema = `
     CREATE TABLE IF NOT EXISTS Rides
     (
       rideID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,4 +15,12 @@ const createRideTableSchema = `
     )
 `;
 
-export default createRideTableSchema;
+export interface IRideRequestParams {
+  startLat: number;
+  startLong: number;
+  endLat: number;
+  endLong: number;
+  riderName: string;
+  driverName: string;
+  driverVehicle: string;
+}

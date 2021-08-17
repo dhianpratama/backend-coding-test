@@ -2,7 +2,7 @@ import { open } from "sqlite";
 import sqlite3 from "sqlite3";
 
 import config from "../config";
-import createRideTableSchema from "./ride";
+import { createRideTableSchema } from "./ride";
 
 let db;
 
