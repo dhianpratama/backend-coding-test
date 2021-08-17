@@ -135,7 +135,7 @@ describe("API tests", () => {
                 .expect("Content-Type", /json/)
                 .then((response) => {
                   const responseData = response.body;
-                  expect(responseData.code).equal(httpStatus.OK);
+                  expect(responseData.code).equal(httpStatus.CREATED);
                   expect(responseData.data.ride.riderName).equal(DUMMY_RIDE.rider_name);
                   rideID = responseData.data.ride.rideID;
                   done();

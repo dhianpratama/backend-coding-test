@@ -36,7 +36,7 @@ export const postRide = async (req: Request, res: Response) => {
   const ride = await createNewRide(rideParams);
 
   const data = { ride };
-  return res.success({ data });
+  return res.success({ status: httpStatus.CREATED, data });
 };
 
 export const getSingleRide = async (req: Request, res: Response) => {

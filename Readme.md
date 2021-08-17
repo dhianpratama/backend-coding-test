@@ -23,15 +23,27 @@ npm install
 ```
 
 ## Usage
+Development mode (using nodemon, will listen to any file changes)
 
+```sh
+npm run dev
+```
+
+Production mode
 ```sh
 npm run start
 ```
 
 ## Run tests
+To run unit test
 
 ```sh
 npm run test
+```
+
+To run load test
+```sh
+npm run test:load
 ```
 ...
 
@@ -52,83 +64,202 @@ Content-Type: application/json
 ```
 **Successful Response:**
 ```json
-200 OK
+HTTP/1.1 200 OK
 Content-Type: application/json
 
-[
-    {
-        "rideID": 1,
-        "startLat": 10,
-        "startLong": 20,
-        "endLat": 30,
-        "endLong": 60,
-        "riderName": "dhian",
-        "driverName": "rony",
-        "driverVehicle": "Civic",
-        "created": "2021-08-15 16:12:31"
+{
+    "program": "backend-coding-test",
+    "version": "1.0.0",
+    "release": "0",
+    "datetime": "2021-08-16T23:53:11.064Z",
+    "timestamp": 1629157991064,
+    "status": "success",
+    "code": 200,
+    "message": "OK",
+    "data": {
+        "rides": [
+            {
+                "rideID": 1,
+                "startLat": -50,
+                "startLong": 20,
+                "endLat": 30,
+                "endLong": 60,
+                "riderName": "dhian",
+                "driverName": "rony",
+                "driverVehicle": "Civic",
+                "created": "2021-08-16 23:52:56"
+            },
+            {
+                "rideID": 2,
+                "startLat": -50,
+                "startLong": 20,
+                "endLat": 30,
+                "endLong": 60,
+                "riderName": "dhian",
+                "driverName": "rony",
+                "driverVehicle": "Civic",
+                "created": "2021-08-16 23:52:58"
+            }
+        ],
+        "currentPage": 1,
+        "totalPage": 1,
+        "limitPerPage": 10
     }
-]
+}
 ```
 **Empty Response:**
 ```json
 HTTP/1.1 200 OK
-Server: My RESTful API
 Content-Type: application/json
-Content-Length: xy
 
 {
-    "error_code": "RIDES_NOT_FOUND_ERROR",
-    "message": "Could not find any rides"
+    "program": "backend-coding-test",
+    "version": "1.0.0",
+    "release": "0",
+    "datetime": "2021-08-16T23:52:33.746Z",
+    "timestamp": 1629157953746,
+    "status": "success",
+    "code": 200,
+    "message": "OK",
+    "data": {
+        "rides": [],
+        "currentPage": "2",
+        "totalPage": 0,
+        "limitPerPage": 10
+    }
 }
 ``` 
 
-## Save a Ride
-To save a ride data, start and end location point, and also driver data.
+## Get Ride by ID
+To get a ride data by ID
 
 **Request:**
 ```json
-POST /rides
-Content-Type: application/json
-
-{
-    "start_lat": 10,
-    "start_long": 20,
-    "end_lat": 30,
-    "end_long": 60,
-    "rider_name": "dhian",
-    "driver_name": "rony",
-    "driver_vehicle": "Civic"
-}
+POST /rides/:id
 ```
 **Successful Response:**
 ```json
-200 OK
+HTTP/1.1 201 OK
 Content-Type: application/json
 
-[
-    {
-        "rideID": 1,
-        "startLat": 10,
-        "startLong": 20,
-        "endLat": 30,
-        "endLong": 60,
-        "riderName": "dhian",
-        "driverName": "rony",
-        "driverVehicle": "Civic",
-        "created": "2021-08-15 16:12:31"
+{
+    "program": "backend-coding-test",
+    "version": "1.0.0",
+    "release": "0",
+    "datetime": "2021-08-16T23:54:51.818Z",
+    "timestamp": 1629158091818,
+    "status": "success",
+    "code": 201,
+    "message": "OK",
+    "data": {
+        "ride": {
+            "rideID": 1,
+            "startLat": -50,
+            "startLong": 20,
+            "endLat": 30,
+            "endLong": 60,
+            "riderName": "dhian",
+            "driverName": "rony",
+            "driverVehicle": "Civic",
+            "created": "2021-08-16 23:54:51"
+        }
     }
-]
+}
 ```
 **Failed Response:**
 ```json
-HTTP/1.1 200 OK
-Server: My RESTful API
+HTTP/1.1 404 Not Found
 Content-Type: application/json
-Content-Length: xy
 
 {
-    "error_code": "VALIDATION_ERROR",
-    "message": "Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively"
+    "program": "backend-coding-test",
+    "version": "1.0.0",
+    "release": "0",
+    "datetime": "2021-08-16T23:58:26.718Z",
+    "timestamp": 1629158306718,
+    "status": "fail",
+    "code": 404,
+    "message": "Ride not found",
+    "data": {}
+}
+``` 
+
+## Get All Rides
+To list all rides data.
+
+**Request:**
+```json
+GET /rides
+Query String:
+  - page (default 1)
+  - limit (default 10)
+Content-Type: application/json
+```
+**Successful Response:**
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "program": "backend-coding-test",
+    "version": "1.0.0",
+    "release": "0",
+    "datetime": "2021-08-16T23:53:11.064Z",
+    "timestamp": 1629157991064,
+    "status": "success",
+    "code": 200,
+    "message": "OK",
+    "data": {
+        "rides": [
+            {
+                "rideID": 1,
+                "startLat": -50,
+                "startLong": 20,
+                "endLat": 30,
+                "endLong": 60,
+                "riderName": "dhian",
+                "driverName": "rony",
+                "driverVehicle": "Civic",
+                "created": "2021-08-16 23:52:56"
+            },
+            {
+                "rideID": 2,
+                "startLat": -50,
+                "startLong": 20,
+                "endLat": 30,
+                "endLong": 60,
+                "riderName": "dhian",
+                "driverName": "rony",
+                "driverVehicle": "Civic",
+                "created": "2021-08-16 23:52:58"
+            }
+        ],
+        "currentPage": 1,
+        "totalPage": 1,
+        "limitPerPage": 10
+    }
+}
+```
+**Empty Response:**
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "program": "backend-coding-test",
+    "version": "1.0.0",
+    "release": "0",
+    "datetime": "2021-08-16T23:52:33.746Z",
+    "timestamp": 1629157953746,
+    "status": "success",
+    "code": 200,
+    "message": "OK",
+    "data": {
+        "rides": [],
+        "currentPage": "2",
+        "totalPage": 0,
+        "limitPerPage": 10
+    }
 }
 ``` 
 
